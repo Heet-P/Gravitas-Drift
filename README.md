@@ -86,7 +86,7 @@ Defeated enemies have a chance to drop power-ups:
 
 ## 🙌 Credits
 
-Game created by **Heet**  
+Game created by **Heet Parikh**  
 Special thanks to OpenAI's ChatGPT and Anthropic's Claude for helping in managing the learning curve for JavaScript. 
 
 ---
@@ -111,5 +111,6 @@ Special thanks to OpenAI's ChatGPT and Anthropic's Claude for helping in managin
 
 - [ ] Online leaderboard
 - [ ] New enemy types
-- [ ] Mobile/touch support
+- [ ] Mobile/touch support `(top priority)`
+- [ ] Local Storage for HighScores
 - [ ] Sound effects and music
