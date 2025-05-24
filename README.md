@@ -87,7 +87,7 @@ Defeated enemies have a chance to drop power-ups:
 ## 🙌 Credits
 
 Game created by **Heet**  
-Special thanks to OpenAI's ChatGPT for collaboration.
+Special thanks to OpenAI's ChatGPT and Anthropic's Claude for helping in managing the learning curve for JavaScript. 
 
 ---
 
