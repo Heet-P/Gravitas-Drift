@@ -169,12 +169,13 @@ function drawMenu() {
     ctx.fillText('Contact: heet16@gmail.com', SCREEN_WIDTH - 20, SCREEN_HEIGHT - 15);
     ctx.font = '16px monospace';
     ctx.textAlign = 'left';
-    ctx.fillText('Instructions:', 20, SCREEN_HEIGHT - 110);
-    ctx.fillText('1. Use W/A/S/D to Move', 20, SCREEN_HEIGHT - 90);
-    ctx.fillText('2. Power-Ups:', 20, SCREEN_HEIGHT - 70);
-    ctx.fillText('   Blue = Shield', 20, SCREEN_HEIGHT - 50);
-    ctx.fillText('   Green = Rapid Fire', 20, SCREEN_HEIGHT - 30);
-    ctx.fillText('   Purple = Slow Time', 20, SCREEN_HEIGHT - 10);
+    ctx.fillText('Instructions:', 20, SCREEN_HEIGHT - 130);
+    ctx.fillText('1. Use W/A/S/D to Move', 20, SCREEN_HEIGHT - 110);
+    ctx.fillText('2. Power-Ups: (50% Chance)', 20, SCREEN_HEIGHT - 90);
+    ctx.fillText('   Blue = Shield', 20, SCREEN_HEIGHT - 70);
+    ctx.fillText('   Green = Rapid Fire', 20, SCREEN_HEIGHT - 50);
+    ctx.fillText('   Purple = Slow Time', 20, SCREEN_HEIGHT - 30);
+    ctx.fillText('   Pink = Health Gain', 20, SCREEN_HEIGHT - 10);
 }
 
 function drawGame() {
