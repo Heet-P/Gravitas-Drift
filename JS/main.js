@@ -165,7 +165,7 @@ function drawMenu() {
     ctx.font = '16px monospace';
     ctx.textAlign = 'right';
     ctx.fillText('Press L for Global LeaderBoard', SCREEN_WIDTH - 20, SCREEN_HEIGHT - 55);
-    ctx.fillText('Made by Heet Parikh', SCREEN_WIDTH - 20, SCREEN_HEIGHT - 35);
+    ctx.fillText('Made by Heet Parikh 24CS058', SCREEN_WIDTH - 20, SCREEN_HEIGHT - 35);
     ctx.fillText('Contact: heet16@gmail.com', SCREEN_WIDTH - 20, SCREEN_HEIGHT - 15);
     ctx.font = '16px monospace';
     ctx.textAlign = 'left';
