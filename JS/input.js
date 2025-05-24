@@ -5,7 +5,9 @@ export const input = {
     right: false,
     shoot: false,
     mouseX: 0,
-    mouseY: 0
+    mouseY: 0,
+    keyL: false,
+    keyM: false
 };
 
 window.addEventListener('keydown', (e) => {
@@ -28,6 +30,12 @@ window.addEventListener('keydown', (e) => {
             break;
         case 'Space':
             input.shoot = true;
+            break;
+        case 'KeyL':
+            input.keyL = true;
+            break;
+        case 'KeyM':
+            input.keyM = true;
             break;
     }
 });
@@ -52,6 +60,12 @@ window.addEventListener('keyup', (e) => {
             break;
         case 'Space':
             input.shoot = false;
+            break;
+        case 'KeyL':
+            input.keyL = false;
+            break;
+        case 'KeyM':
+            input.keyM = false;
             break;
     }
 });
