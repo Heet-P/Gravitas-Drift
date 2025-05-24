@@ -11,13 +11,7 @@
     <canvas id="gameCanvas" width="1200" height="800" style="display: block; margin: 0 auto;"></canvas>
 
     <!-- Supabase integration -->
-    <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-
-        const supabaseUrl = SupaBaseURL;
-        const supabaseKey = SupaBaseKey;
-        window.supabase = createClient(supabaseUrl, supabaseKey);
-    </script>
+    <script type="module" src="js/supabaseClient.js"></script>
 
     <script type="module" src="js/main.js"></script>
 </body>
