@@ -1,0 +1,3 @@
+[build]
+  command = "node replace-env.js"
+  publish = "."
