@@ -11,7 +11,13 @@
     <canvas id="gameCanvas" width="1200" height="800" style="display: block; margin: 0 auto;"></canvas>
 
     <!-- Supabase integration -->
-    <script type="module" src="js/supabaseClient.js"></script>
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+                
+        const supabaseUrl = 'https://izcziguysirfncenvpgc.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6Y3ppZ3V5c2lyZm5jZW52cGdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgwOTkzNDcsImV4cCI6MjA2MzY3NTM0N30.4QPeapvKS4vMoywwR9yqII6Q6-BXmmMoDSEVjTIZT5k';
+        window.supabase = createClient(supabaseUrl, supabaseKey);
+    </script>
 
     <script type="module" src="js/main.js"></script>
 </body>
