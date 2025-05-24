@@ -6,22 +6,23 @@ import { Enemy } from './enemy.js';
 import { PowerUp } from './powerup.js';
 import { Particle } from './particle.js';
 import { distance } from './utils.js';
-//import { saveLeaderboard, loadLeaderboard, drawLeaderboard } from './leaderboard.js';
+import { saveScore, getTopScores, drawLeaderboard } from './leaderboard.js';
 import { drawUI } from './ui.js';
 
 let canvas, ctx;
 let gameState = GameState.MENU;
-
 let player;
 let bullets = [];
 let enemies = [];
 let powerUps = [];
 let particles = [];
-let gameOverTimer=0;
+
 let wave = 1;
 let waveTimer = 0;
 let score = 0;
-
+let scoreSaved = false;
+let topScores = [];
+let gameOverTimer = 0;
 let lastTime = 0;
 
 function init() {
@@ -37,6 +38,7 @@ function init() {
     wave = 1;
     waveTimer = 0;
     score = 0;
+    scoreSaved = false;
 
     requestAnimationFrame(gameLoop);
 }
@@ -56,23 +58,25 @@ function update(dt) {
         case GameState.MENU:
             if (input.shoot || input.mouseDown) {
                 gameState = GameState.PLAYING;
-                init(); // reset game
+                init();
+            }
+            else if(input.keyL){
+                gameState=GameState.LEADERBOARD;
+                topScores=[];
             }
             break;
 
         case GameState.PLAYING:
             player.update(dt, input);
 
-            // Check for game over condition
             if (player.health <= 0) {
-                player.health = 0; // Clamp to 0
+                player.health = 0;
                 gameState = GameState.GAME_OVER;
                 gameOverTimer = 0;
-                input.shoot = false; // Prevent carryover input
+                input.shoot = false;
                 input.mouseDown = false;
             }
 
-            // Shooting
             let shootInterval = player.rapidFire ? 0.1 : 0.2;
             if ((input.shoot || input.mouseDown) && player.shootTimer <= 0) {
                 const dir = getShootDirection();
@@ -100,6 +104,15 @@ function update(dt) {
         case GameState.GAME_OVER:
             gameOverTimer += dt;
 
+            if (!scoreSaved && gameOverTimer > 0.5) {
+                const name = prompt("Game Over! Enter your name:");
+                if (name){
+                    console.log("Saving Score", name, score);
+                    saveScore(name, score);
+                }
+                scoreSaved = true;
+            }
+
             if ((input.shoot || input.mouseDown) && gameOverTimer > 1.0) {
                 gameState = GameState.MENU;
                 input.shoot = false;
@@ -108,10 +121,18 @@ function update(dt) {
             break;
 
         case GameState.LEADERBOARD:
+            if (topScores.length === 0) {
+                getTopScores().then(data => {
+                    topScores = data;
+                });
+            }
+            if (input.keyM){
+                gameState=GameState.MENU;
+                input.keyM=false;
+            }
             break;
     }
 }
-
 
 function draw() {
     ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -120,20 +141,14 @@ function draw() {
         case GameState.MENU:
             drawMenu();
             break;
-
         case GameState.PLAYING:
             drawGame();
             break;
-
         case GameState.GAME_OVER:
             drawGameOver();
             break;
-
         case GameState.LEADERBOARD:
-            if(gameState == GameState.LEADERBOARD){
-            const leaderboard = loadLeaderboard();
-            drawLeaderboard(ctx, leaderboard);
-            }
+            drawLeaderboard(ctx, topScores);
             break;
     }
 }
@@ -149,17 +164,17 @@ function drawMenu() {
     ctx.fillStyle = '#ffffff';
     ctx.font = '16px monospace';
     ctx.textAlign = 'right';
-    ctx.fillText('Enjoy The Game, Get the Highest Score Possible!!', SCREEN_WIDTH - 20, SCREEN_HEIGHT - 55);
-    ctx.fillText('Made by Heet', SCREEN_WIDTH - 20, SCREEN_HEIGHT - 35); 
-    ctx.fillText('Contact: heet16@gmail.com', SCREEN_WIDTH - 20, SCREEN_HEIGHT - 15); 
+    ctx.fillText('Press L for Global LeaderBoard', SCREEN_WIDTH - 20, SCREEN_HEIGHT - 55);
+    ctx.fillText('Made by Heet', SCREEN_WIDTH - 20, SCREEN_HEIGHT - 35);
+    ctx.fillText('Contact: heet16@gmail.com', SCREEN_WIDTH - 20, SCREEN_HEIGHT - 15);
     ctx.font = '16px monospace';
     ctx.textAlign = 'left';
-    ctx.fillText('Instructions:', SCREEN_WIDTH - 1200, SCREEN_HEIGHT - 110);
-    ctx.fillText('1. Use W/A/S/D to Move', SCREEN_WIDTH - 1200, SCREEN_HEIGHT - 90);
-    ctx.fillText('2. There are Power-Ups:', SCREEN_WIDTH - 1200, SCREEN_HEIGHT - 70);
-    ctx.fillText('Blue = Shield(Absorbs Damage)', SCREEN_WIDTH - 1200, SCREEN_HEIGHT - 50);
-    ctx.fillText('Green = Rapid Fire', SCREEN_WIDTH - 1200, SCREEN_HEIGHT - 30);
-    ctx.fillText('Purple = Slow Time', SCREEN_WIDTH - 1200, SCREEN_HEIGHT - 10);
+    ctx.fillText('Instructions:', 20, SCREEN_HEIGHT - 110);
+    ctx.fillText('1. Use W/A/S/D to Move', 20, SCREEN_HEIGHT - 90);
+    ctx.fillText('2. Power-Ups:', 20, SCREEN_HEIGHT - 70);
+    ctx.fillText('   Blue = Shield', 20, SCREEN_HEIGHT - 50);
+    ctx.fillText('   Green = Rapid Fire', 20, SCREEN_HEIGHT - 30);
+    ctx.fillText('   Purple = Slow Time', 20, SCREEN_HEIGHT - 10);
 }
 
 function drawGame() {
@@ -185,32 +200,6 @@ function drawGameOver() {
     ctx.font = '20px sans-serif';
     ctx.fillText(`Score: ${score}`, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 10);
     ctx.fillText('Click or press a key to return to menu', SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 50);
-}
-
-
-function drawLeaderboard() {
-    ctx.fillStyle = 'yellow';
-    ctx.font = '32px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('LEADERBOARD', SCREEN_WIDTH / 2, 100);
-
-    // Display top 10 scores
-    const leaderboard = loadLeaderboard();
-    for (let i = 0; i < leaderboard.length; i++) {
-        const entry = leaderboard[i];
-        const color = i === 0 ? 'gold' : (i === 1 ? 'silver' : (i === 2 ? 'bronze' : 'white'));
-        
-        ctx.fillStyle = color;
-        ctx.fillText(`${i + 1}. ${entry.name} - ${entry.score}`, SCREEN_WIDTH / 2, 180 + i * 40);
-    }
-
-    if (leaderboard.length === 0) {
-        ctx.fillStyle = 'white';
-        ctx.fillText('No scores yet!', SCREEN_WIDTH / 2, 200);
-    }
-
-    ctx.fillStyle = 'yellow';
-    ctx.fillText("Press M to return to Menu", SCREEN_WIDTH / 2, SCREEN_HEIGHT - 50);
 }
 
 function drawScore() {
