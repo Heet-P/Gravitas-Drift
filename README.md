@@ -109,8 +109,9 @@ Special thanks to OpenAI's ChatGPT and Anthropic's Claude for helping in managin
 
 ## 🧩 Future Plans
 
-- ~~[ ] Online leaderboard~~
+- [ ] ~~Online leaderboard~~
 - [ ] New enemy types
 - [ ] Mobile/touch support `(top priority)`
 - [ ] Local Storage for HighScores
 - [ ] Sound effects and music
+      
